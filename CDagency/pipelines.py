@@ -6,6 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 
+
 class MongoPipeline(object):
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -28,13 +29,13 @@ class MongoPipeline(object):
         # name = item.__class__.__name__
         # self.db[name].insert(dict(item))
 
-        #方式一：分部门存储在collection
-        #col_name = item["col_name"]             #获取集合名称
-        #方式二：统一存储在一个collection
+        # 方式一：分部门存储在collection
+        # col_name = item["col_name"]             #获取集合名称
+        # 方式二：统一存储在一个collection
         col_name = 'unified'
 
         self.db[col_name].update({'title': item['title']}, {'$set': dict(item)}, True, True)
-                                                #根据新闻标题进行去重，无重复则创建新字段
+        # 根据新闻标题进行去重，无重复则创建新字段
         return item
 
     def close_spider(self, spider):
